@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<main>
+
+    <div class="tabs-profile">
+        <div class="container">
+            <div class="row">
+                {% include "left_tab_profile.html" %}
+                <div class="col-lg-8 col-sm-7 col-7 mb-2">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_a">
+
+                            <section class="mb-4">
+                                <div class=" fadeIn">
+
+                                    <h1>Profile</h1>
+                                    <form action="/accounts/profile/" method="POST">
+                                        {% csrf_token %}
+
+                                        {% for field in form %}
+
+                                        <div class="form-group">
+                                            <small class="text-danger">
+                                                {{ field.errors }}</small>
+                                            {{ field.errors }}
+                                            <label for="" class="">{{ field.label_tag }}
+                                            </label>
+                                            {% if field.auto_id == 'id_city' %}
+                                            <select id="citySel" class="form-control" name="city">
+                                                <option value="" selected="selected">Select City</option>
+                                            </select>
+                                            {% elif field.auto_id == 'id_district' %}
+                                            <select id="district" class="form-control" name="district">
+                                                <option value="" selected="selected">Please select City first</option>
+                                            </select>
+                                            {% else %}
+                                            {{ field |add_class:'form-control' }}
+                                            {% endif %}
+                                            {% if field.help_text %}
+                                            <p class="help">{{ field.help_text|safe }}</p>
+                                            {% endif %}
+
+                                        </div>
+                                        {% endfor %}
+                                        <button type="submit" class="btn btn-outline-success">
+                                            Update profile
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </section>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
+{% block extra_scripts %}
+<script>
+    // tabs-profile-
+    $(function () {
+        var $a = $(".tabs-profile li");
+        $a.click(function () {
+            $a.removeClass("active");
+            $(this).addClass("active");
+        });
+    });
+</script>
+<script>
+    async function get_city() {
+        var response = await fetch('/api/cities/')
+        var data = await response.json()
+        return data
+    }
+    window.onload = async function () {
+        var citySel = document.getElementById("citySel")
+        district = document.getElementById("district")
+        var stateObject = await get_city()
+
+        let user_city_id = -1;
+        let user_district_id = -1;
+        if ("{{ request.user.is_authenticated }}" && "{{ request.user.city }}") {
+            user_city_id = "{{ request.user.city.id }}"
+        }
+
+        if ("{{ request.user.is_authenticated }}" && "{{ request.user.district }}") {
+            user_district_id = "{{ request.user.district.id }}"
+        }
+
+        for (var i = 0; i < stateObject.length; i++) {
+            console.log("city")
+            console.log(user_city_id, stateObject[i].id)
+            if (user_city_id != stateObject[i].id) {
+                $('#citySel').append(`<option value="${
+                    stateObject[i].id
+                    }"  > ${
+                    stateObject[i].name
+                    } </option>`)
+            } else {
+                $('#citySel').append(`<option value="${
+                    stateObject[i].id
+                    }" selected > ${
+                    stateObject[i].name
+                    } </option>`)
+            }
+        }
+        citySel.onchange = async function () {
+            district.length = 1; // remove all options bar first
+            if (this.selectedIndex < 1)
+                return;
+            var response = await fetch(`/api/cities/${
+                this.value
+                }`)
+            var city = await response.json()
+            for (var i = 0; i < city.districts.length; i++) {
+                if (user_district_id != city.districts[i].id) {
+                    $('#district').append(`<option value="${
+                        city.districts[i].id
+                        }"  > ${
+                        city.districts[i].name
+                        } </option>`)
+                } else {
+                    $('#district').append(`<option value="${
+                        city.districts[i].id
+                        }" selected > ${
+                        city.districts[i].name
+                        } </option>`)
+
+                }
+
+            }
+        }
+        citySel.onchange(); // reset in case page is reloaded
+    }
+</script>
+{% endblock extra_scripts %}

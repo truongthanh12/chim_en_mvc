@@ -1,0 +1,57 @@
+{% extends 'base.html' %} {% load widget_tweaks %}
+{% load humanize %}
+{% block content %}
+<main>
+
+    <div class="tabs-profile">
+        <div class="container">
+            <div class="row">
+                {% include "left_tab_profile.html" %}
+                <div class="col-lg-8 col-sm-7 col-7 ">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_a">
+
+                            <section class="mb-4 ">
+                                <h3>UserPayment</h3>
+                                <div class=" fadeIn row mt-4">
+                                    {% for payment in payments %}
+                                    <div class="col-12">
+                                        <a href="/accounts/user-payments/{{payment.id}}">Payment ID :{{payment.id}}</a>
+                                        <p>Total Price : {{payment.amount|intcomma}}</p>
+                                        <p>Status {{payment.status}}</p>
+                                        <p>Created At {{payment.created_at}} </p>
+                                        <hr />
+                                    </div>
+
+                                    {% endfor %}
+
+                                </div>
+                            </section>
+                        </div>
+                        <div class="tab-pane" id="tab_b">
+                            <h3>2.</h3>
+
+                        </div>
+                        <div class="tab-pane" id="tab_c">
+                            <h3>3</h3>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+{% block extra_scripts %}
+<script>
+    //tabs-profile-
+    $(function () {
+        var $a = $(".tabs-profile li");
+        $a.click(function () {
+            $a.removeClass("active");
+            $(this).addClass("active");
+        });
+    });
+</script>
+{% endblock extra_scripts %}

@@ -1,0 +1,107 @@
+{% extends "base.html" %} {% block content %}
+<main>
+  <div class="container">
+    <div class="table-responsive text-nowrap py-5">
+      <h2>Order Summary</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Image</th>
+            <th scope="col">Item title</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total Item Price</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order_item in object.items.all %}
+          <tr class="ct-table-content">
+            <th scope="row">{{ forloop.counter }}</th>
+            <td><img height="64" src="{{ order_item.product.images.first }}" alt="{{ order_item.product.title }}" />
+            </td>
+            <td>{{ order_item.product.title }}</td>
+            {% if order_item.product.promotion > 0 %}
+            <td>
+              {{ order_item.product.get_price }} vnđ <span class="fa-stack has-badge"
+                data-count="-{{ order_item.product.promotion }} %"></span> </td>
+            {% else %}
+            <td>{{ order_item.product.get_price }} vnđ</td>
+            {%endif %}
+            <td>
+              <a style="color: #aaa;" href="{% url 'cart:descrease-quantity' order_item.id %}"><i data-toggle="tooltip"
+                  data-placement="top" title="Minus" class="fa fa-minus mr-2"></i></a>
+              {{ order_item.quantity }}
+              <a style="color: #aaa;" href="{% url 'cart:increase-quantity' order_item.id %}"><i data-toggle="tooltip"
+                  data-placement="top" title="Plus" class="fa fa-plus ml-2"></i></a>
+            </td>
+            <td>
+              {% if order_item.item.discount_price %} ${{
+              order_item.get_total_discount_item_price }}
+              <span class="badge badge-primary">Saving ${{ order_item.get_amount_saved }}</span>
+              {% else %} {{ order_item.get_total_item_price }} vnđ{% endif %}
+            </td>
+            <td> <a style="color: red;" href="{% url 'cart:remove_from_cart' order_item.id %}">
+                <i data-toggle="tooltip" data-placement="top" title="Delete"
+                  class="far fa-trash-alt text-secondary"></i>
+              </a></td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5">Your cart is empty</td>
+          </tr>
+          <tr>
+            <td colspan="5">
+              <a class="btn btn-success float-right" href="{% url 'cart:product-list' %}">Continue shopping</a>
+            </td>
+          </tr>
+          {% endfor %} {% if object.coupon %}
+          <tr>
+            <td colspan="4"><b>Coupon</b></td>
+            <td><b>-${{ object.coupon.amount }}</b></td>
+          </tr>
+          {% endif %} {% if object.get_total %}
+          <tr>
+            <td colspan="4"><b>Order Total</b></td>
+            <td><b>${{ object.get_total }}</b></td>
+          </tr>
+          <tr>
+            <td colspan="5">
+              <a class="btn btn-warning float-right ml-2" href="/checkout/">Proceed to checkout</a>
+              <a class="btn btn-success float-right" href="/">Continue shopping</a>
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+    {% if object.items.count > 0 %}
+    <div class="row">
+      <div class="col-md-4">
+
+        <a href="{% url 'cart:payment_information' %}" class="bold-text btn btn-success"
+          style="padding: .5rem 3.4rem;">Buy</a>
+      </div>
+
+      <div class="col-md-8">
+        <div class="row justify-content-end">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-12 text-right  mb-5">
+                <h3 class="text-black h4 text-uppercase total-cart">Cart Totals: {{object.get_total_price}} vnđ</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row back-shop-summary pb-3">
+      <a href="{% url 'cart:product-list' %}"><i class="fas fa-arrow-left"></i> Shopping</a>
+    </div>
+    {% endif %}
+  </div>
+</main>
+
+{% endblock content %}

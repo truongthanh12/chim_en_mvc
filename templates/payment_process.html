@@ -1,0 +1,98 @@
+{% extends 'base.html' %} {% load widget_tweaks %}{% block content %}
+<section class="products-tab p-4 pt-5">
+  <div class="tab-title mt-5">
+    <div class="text-title-center">
+      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <a class="nav-item active" aria-controls="nav-info" aria-selected="true">
+          <div class="class-flex" id="step1">
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>01. Infomation</p>
+          </div>
+        </a>
+        <div class="bottom-line"></div>
+        <a class="nav-item active" aria-selected="false">
+          <div class="class-flex" id="step2">
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>02. Checkout</p>
+          </div>
+        </a>
+        <div class="bottom-line"></div>
+        <a class="nav-item active" aria-selected="false">
+          <div class="class-flex" id="step3">
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>03. Confirm</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="container">
+  <div class="step-to-payment mb-2">
+    <div class="tab-content tab-step pt-4" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
+        {% if success == True %}
+        <h2 class="text-center py-5"> Payment Success </h2>
+        <div class="back-shop my-2 justify-content-center">
+          <a id="step2_prev" href="{% url 'user-payments' %}"><i class="fas fa-arrow-left"></i>Xem don
+            hang</a>
+        </div>
+        {% else %}
+        <h2 class="text-center py-5"> Payment Failed </h2>
+        <div class="back-shop my-2 justify-content-center">
+          <a id="step2_prev" href="{% url 'cart:payment_information' %}"><i class="fas fa-arrow-left"></i>Xem don
+            hang</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content%}
+{% block extra_scripts %}
+
+<script>
+//   var step1 = document.getElementById("step1");
+//   var step2 = document.getElementById("step2");
+//   var step3 = document.getElementById("step3");
+//   // var x = document.getElementById("info");
+//   //   var x = document.getElementById("check");
+//   //   var x = document.getElementById("pay");
+//   var x = document.getElementsByClassName("payment");
+//   var step1_next = document.getElementById("step1_next");
+//   var step2_prev = document.getElementById("step2_prev");
+//   var step2_next = document.getElementById("step2_next");
+//   var step3_prev = document.getElementById("step3_prev");
+//   window.onload = function () {
+//     step1.classList.add("active")
+//     x[0].style.display = "block";
+//     x[1].style.display = "none";
+//     x[2].style.display = "none";
+//   };
+//   step1_next.addEventListener("click", () => {
+//     step2.classList.add("active")
+
+//     x[0].style.display = "none";
+//     x[1].style.display = "block";
+//     x[2].style.display = "none";
+//   })
+//   step2_next.addEventListener("click", () => {
+//     step3.classList.add("active")
+//     x[0].style.display = "none";
+//     x[1].style.display = "block";
+//     x[2].style.display = "block";
+//   })
+//   step2_prev.addEventListener("click", () => {
+//     step2.classList.remove("active")
+//     x[0].style.display = "block";
+//     x[1].style.display = "none";
+//     x[2].style.display = "none";
+//   })
+//   step3_prev.addEventListener("click", () => {
+//     step3.classList.remove("active")
+//     x[0].style.display = "none";
+//     x[1].style.display = "block";
+//     x[2].style.display = "none";
+//   })
+</script>
+{% endblock extra_scripts %}

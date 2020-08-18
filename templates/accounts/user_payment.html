@@ -1,0 +1,64 @@
+{% extends 'base.html' %} {% load widget_tweaks %}
+
+{% block content %}
+<main>
+
+    <div class="tabs-profile">
+        <div class="container">
+            <div class="row">
+                {% include "left_tab_profile.html" %}
+                <div class="col-lg-8 col-sm-7 col-7 ">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_a">
+
+                            <section class="mb-4 mt-4">
+                                <div class=" fadeIn">
+                                    <h5 class="text-center">Payment ID : {{payment.id}}</h5>
+                                    {% for product in payment.product_details.all %}
+                                    <div class="row">
+                                        <div class="col-md-6 col-12 p-5">
+                                            {{product.image}}
+                                            <!-- <img src="{{product.image}}" alt="{{product.product_name}}"> -->
+                                        </div>
+                                        <div class="col-md-6 col-12 ">
+                                            <p>Product Name: {{product.product_name}}</p>
+                                            <p>Product Price: {{product.product_price}} VNĐ</p>
+                                            <p>Product Amount: {{product.product_amount}}</p>
+                                            <p>Product Promotion: {{product.product_promotion}}</p>
+                                            <p>Total Product Price: {{product.get_total_price}} VNĐ</p>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    {% endfor %}
+                                    <p> <strong>Ship: {{payment.ship}} VNĐ</strong> </p>
+                                    <p><strong>Total Price {{payment.amount}} VNĐ</strong> </p>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="tab-pane" id="tab_b">
+                            <h3>2.</h3>
+
+                        </div>
+                        <div class="tab-pane" id="tab_c">
+                            <h3>3</h3>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+{% block extra_scripts %}
+<script>
+    //tabs-profile-
+    $(function () {
+        var $a = $(".tabs-profile li");
+        $a.click(function () {
+            $a.removeClass("active");
+            $(this).addClass("active");
+        });
+    });
+</script>
+{% endblock extra_scripts %}

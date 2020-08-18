@@ -1,0 +1,147 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>{% block head_title %}{% endblock %}</title>
+  {% block extra_head %} {% endblock %}
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+  <link rel='stylesheet' href='https://cdn.rawgit.com/daneden/animate.css/v3.1.0/animate.min.css'>
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css?{% now "U" %}" />
+
+  <link rel="stylesheet" href="/static/css/nav-bar.css?{% now "U" %}" />
+  <link rel="stylesheet" href="/static/js/mainjs.js?now " U" %}" />
+
+  <link rel="stylesheet" href="/static/css/thanh.css?{% now "U" %}" />
+
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.x.x/css/swiper.min.css"> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.x.x/js/swiper.min.js"></script> -->
+
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+  <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <style type="text/css">
+    /* html,
+    body,
+    header,
+    .carousel {
+      height: 60vh;
+    } */
+
+
+    /* @media (max-width: 740px) {
+
+        >>>>>>>Stashed changes html,
+        body,
+        header,
+        .carousel {
+          height: 100vh;
+        }
+      } */
+
+    @media (min-width: 800px) and (max-width: 850px) {
+
+      html,
+      body,
+      header,
+      .carousel {
+        height: 100vh;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+  <div id="message"></div>
+  {% if messages %}
+  {% for message in messages %}
+  <div class="width-full">
+    <div class="alert alert-{{ message.tags }} animated fadeInDown" role="alert" style="width: 300px">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="width: 300px">
+      </button>
+      {{message}}
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% include "navbar.html" %}
+
+
+  <script src='https://cdn.rawgit.com/matthieua/WOW/1.0.1/dist/wow.min.js'></script>
+  <script src="https://kit.fontawesome.com/bff3b0c353.js" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+
+  {% block content %} {% endblock content %} {% block extra_body %}
+  {% endblock %}
+  {% include "footer.html" %}
+  {% include "scripts.html" %}
+  {% block extra_scripts %}
+  <script>
+    new WOW().init();
+  </script> {% endblock extra_scripts %}
+  <script type="text/javascript">
+    $(document).ready(function () {
+      setTimeout(function () {
+        $('.alert').hide();
+        $('#message').hide();
+
+      }, 3500);// <-- time in milliseconds, 1000 =  1 sec
+    });
+  </script>
+  <script>
+    const tym = (id) => {
+      fetch(`/cart/tym_or_unTym/${id}`, {
+        headers: {
+          'Authorization': ` token ${localStorage.getItem('token')}`
+        },
+        method: 'GET',
+
+      }).then(response => response.text()).then(data => {
+        document.getElementById(id).innerHTML = ''
+        if (JSON.parse(data).liked == true) {
+          document.getElementById(id).innerHTML = `<i 
+                              class="fa fa-heart"></i>`;
+          document.getElementById('message').innerHTML = ` <div class="alert  alert-success animated fadeInDown" role="alert">
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            liked
+                            </div>`
+        }
+        else {
+          document.getElementById(id).innerHTML = `<i
+                              class="fa fa-heart-o"></i>`
+          document.getElementById('message').innerHTML = ` <div class="alert  alert-success animated fadeInDown" role="alert">
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            unLiked
+                            </div>`
+        }
+        if (JSON.parse(data).count > 0)
+          document.getElementById('icon-badge').setAttribute("data-count", `${JSON.parse(data).count}`)
+        else
+          document.getElementById('icon-badge').removeAttribute("data-count");
+      });
+
+    }
+
+  </script>
+</body>
+
+</html>

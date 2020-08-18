@@ -1,0 +1,159 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>{% block head_title %}{% endblock %}</title>
+  {% block extra_head %} {% endblock %}
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css?{% now "U" %}" />
+
+  <link rel="stylesheet" href="/static/css/nav-bar.css?{% now "U" %}" />
+  <link rel="stylesheet" href="/static/js/mainjs.js?now " U" %}" />
+
+  <link rel="stylesheet" href="/static/css/thanh.css?{% now "U" %}" />
+
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.x.x/css/swiper.min.css"> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.x.x/js/swiper.min.js"></script> -->
+
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+  <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <style type="text/css">
+    html,
+    body,
+    header,
+    .carousel {
+      height: 60vh;
+    }
+
+
+    /* @media (max-width: 740px) {
+
+        >>>>>>>Stashed changes html,
+        body,
+        header,
+        .carousel {
+          height: 100vh;
+        }
+      } */
+
+    @media (min-width: 800px) and (max-width: 850px) {
+
+      html,
+      body,
+      header,
+      .carousel {
+        height: 100vh;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  {% load widget_tweaks %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert  alert-{{ message.tags }} animated fadeInDown" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    {{message}}
+  </div>
+  {% endfor %}
+  {% endif %}
+  <div class="main">
+    <div class="login-background">
+      <section class="login-page">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-md-5 text-center p-4">
+              <h5>Organic logo</h5>
+              <div class="login-welcome">
+                <h2>Welcome to Organic</h2>
+                <p>You don't have account !</p>
+                <a href="{% url 'register' %}"> <button class="btn btn-outline-success text-light">Register</button></a>
+              </div>
+            </div>
+            <div class="col-12 col-md-7 login-responsive text-center">
+              <h2 class="py-4">Sign in</h2>
+              <!-- /accounts/login/?next={{next}} -->
+              <form action="" method="POST" onsubmit="return login()">
+                {% csrf_token %} {% for field in form %}
+                <div class="form-group">
+                  {{ field.errors }}
+
+                  {{ field |add_class:'form-control' |add_class:'input-login' }} {% if field.help_text %}
+                  <p class="help">{{ field.help_text|safe }}</p>
+                  {% endif %}
+                </div>
+                {% endfor %}
+
+                <!-- <input type="submit" value="Login" class="btn btn-default" /> -->
+                <div class="login-welcome py-4">
+                  <button class="btn btn-primary" type="submit">Sign in</button>
+                </div>
+                <div class="none-mobile-login" style="display: none">
+                  <span>You don't have account?</span>
+                  <a href="{% url 'register' %}"> Register</a>
+                </div>
+                <!-- <p class="my-1">
+                Don't have a account?
+                <a href="{% url 'register' %}">Register</a>
+              </p> -->
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+        <div class="login-back">
+          <a href="{% url 'home' %}"><i class="fas fa-arrow-left"></i> Back home</a></div>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://kit.fontawesome.com/bff3b0c353.js" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      setTimeout(function () {
+        // <-- time in milliseconds, 1000 =  1 sec
+        $('.alert').hide();
+      }, 3000);
+    });
+    function login() {
+      const username = $('#id_username').val()
+      const password = $('#id_password').val()
+      fetch('/api/auth/login', {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        method: 'POST',
+        body: JSON.stringify({ username: username, password: password })
+      }).then(response => response.text()).then(data => {
+        localStorage.setItem('token', JSON.parse(data).token)
+      });
+    }
+  </script>
+</body>
+
+</html>

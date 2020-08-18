@@ -1,0 +1,31 @@
+<div class="col-lg-3 col-sm-4 col-4 profile-button pb-3 mt-4">
+    <ul class="nav nav-pills nav-stacked flex-column">
+        {% if url is not None and url == 'profile' %}
+        <li class="mt-2"><a href="/accounts/profile" class="btn btn-outline-success active">Profile</a></li>
+        {% else %}
+        <li class="mt-2"><a href="/accounts/profile" class="btn btn-outline-success ">Profile</a></li>
+        {% endif %}
+
+        {% if url is not None and url == 'payment' %}
+        <li class="active mt-2"><a href="/accounts/user-payments"
+                class="btn btn-outline-success my-2 active">Payments</a>
+        </li>
+        {% else %}
+        <li class="active mt-2"><a href="/accounts/user-payments" class="btn btn-outline-success my-2">Payments</a></li>
+        {% endif %}
+
+        {% if url is not None and url == 'change-email' %}
+        <li><a href="/accounts/changeEmail" class="btn btn-outline-success my-2 active">Change Email</a></li>
+        {% else %}
+        <li><a href="/accounts/changeEmail" class="btn btn-outline-success my-2">Change Email</a></li>
+
+        {% endif %}
+        {% if url is not None and url == 'change-password' %}
+        <li class="mt-2"><a href="/accounts/changePassword" class="btn btn-outline-primary active">Change Password</a>
+        </li>
+        {% else %}
+        <li class="mt-2"><a href="/accounts/changePassword" class="btn btn-outline-primary">Change Password</a></li>
+
+        {% endif %}
+    </ul>
+</div>

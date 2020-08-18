@@ -1,0 +1,505 @@
+{% extends "base.html" %} {% load widget_tweaks %} {% block content %}
+<div class="container dark-grey-text">
+  <!--Grid row-->
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <div class="container">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page"><a href="{% url 'cart:product-list' %}">Shop</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Product detail - {{object.title}}</li>
+      </div>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-12 col-lg-3 mb-5">
+      <div id="menu_area" class="menu-area">
+        <div class="container">
+          <div class="row">
+            <nav class="navbar navbar-light navbar-expand-lg mainmenu">
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse wow fadeInDown" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                  <li class="py-3 p"><i class="fas fa-heart"></i>DANH MỤC CHÍNH</li>
+                  {% for category in categories %}
+                  <li><a href="/cart/shop?category={{category.title}}">{{category.title}}
+                      ({{category.get_products_number}})</a> </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="img-sidebar py-3">
+        <div class="hover-sidebar column">
+          <div>
+            <figure><img
+                src="https://www.thol.com.vn/pub/media/catalog/product/cache/small_image/300x300/beff4985b56e3afdbeabfc89641a4582/t/i/titanium-chocolate.jpg"
+                alt="day"></figure>
+          </div>
+          <div>
+            <figure><img
+                src="https://www.thol.com.vn/pub/media/catalog/product/cache/small_image/300x300/beff4985b56e3afdbeabfc89641a4582/t/i/titanium-chocolate.jpg"
+                alt="day"></figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="similar p-2">
+        <div class="py-3 similar-title text-center"><i class="fas fa-heart"></i>SẢN PHẨM LIÊN QUAN</div>
+        <div class="similar-product py-3">
+          <img
+            src="https://www.thol.com.vn/pub/media/catalog/product/cache/small_image/300x300/beff4985b56e3afdbeabfc89641a4582/e/v/evogen-super-huge.jpg"
+            alt="">
+          <div class="column-similar-product">
+            <span><a href="">Xin chao toi len la nguyen truong thanh</a></span>
+            <span class="price-similar-product pt-2"><a href="">2.000.000d</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-9">
+      <div class="row form-sort">
+
+      </div>
+      <div class="row wow fadeIn p-3 product-in-dedail">
+
+        <div class="col-12 col-md-6 col-sm-12 description-img">
+          <div class="swiper-container gallery-top">
+            <div class="swiper-wrapper">
+              {% for image in object.images.all %}
+              <div class="swiper-slide"><img src="{{image}}" alt="{{object.title}}"></div>
+              {% endfor %}
+
+            </div>
+            <!-- Add Arrows -->
+            <div class="swiper-button-next swiper-button-white"></div>
+            <div class="swiper-button-prev swiper-button-white"></div>
+          </div>
+          <div class="swiper-container gallery-thumbs">
+            <div class="swiper-wrapper">
+              {% for image in object.images.all %}
+              <div class="swiper-slide"><img src="{{image}}" alt="{{object.title}}"></div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <!-- end modal quick view -->
+        <!--Grid column-->
+        <div class="col-md-6 mb-4 description-info-product">
+          <!--Content-->
+          <div class="container">
+            <a href="">
+              <span class="badge purple mr-1">{{ object.get_category_display }}</span>
+            </a>
+
+            <h2 class="pt-3">bject{{o.title}}</h2>
+
+            <p class="lead">
+              {% if object.promotion > 0 %}
+              <span class="mr-1">
+                <del>${{ object.price }}</del>
+              </span>
+              <span class="bold-text ct-primary-color">${{ object.get_promotion_price }}</span>
+              {% else %}
+              <span class=" bold-text ct-primary-color">${{ object.price }}</span>
+              {% endif %}
+            </p>
+
+            <p>{{ object.description }}</p>
+
+            <hr class="ct-divider" />
+
+            <!-- Actions -->
+            <form method="POST" class="d-flex flex-column justify-content-left">
+              <!-- Default input -->
+              <div class="p-2 d-flex">
+                {% csrf_token %} {% for field in form %}
+                <div class="form-group px-1">
+                  {{ field.errors }}
+                  <label for="" class="">{{ field.label_tag }}</label>
+                  {{ field |add_class:'form-control' }} {% if field.help_text%}
+                  <p class="help">{{ field.help_text|safe }}</p>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+              <!-- Cart Actions -->
+              <div class="p-2">
+                <button class="btn btn-success" type="submit">
+                  ADD TO CART
+                  <i class="fa fa-cart-plus"></i>
+                </button>
+              </div>
+
+              <!-- Others Actions -->
+              <div class="p-2 text-dar">
+
+                {% if request.user.is_authenticated%}
+                {% if product.id in liked %}
+                <a id="{{object.id}}" onclick="tym(this.id)">
+                  <i data-toggle="tooltip" data-placement="bottom" title="Add to wishlist" class="fa fa-heart"></i></a>
+                {%else%}
+                <a id="{{object.id}}" onclick="tym(this.id)"><i data-toggle="tooltip" data-placement="bottom"
+                    title="Add to wishlist" class="fa fa-heart-o"></i></a>
+                {% endif %}
+                {% else %}
+                <a><i data-toggle="tooltip" data-placement="bottom" title=" Login to Add to wishlist"
+                    class="fa fa-heart-o"></i></a>
+                {% endif %}
+
+                <button type="button" class="btn" data-toggle="tooltip" data-placement="top" title="Compare">
+                  <i class="fa fa-columns"></i> Compare
+                </button>
+              </div>
+            </form>
+
+            <hr class="ct-divider" />
+
+          </div>
+
+          <!--Content-->
+        </div>
+        <!--Grid column-->
+      </div>
+
+      <div class="description my-2">
+        <div class="description-info">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#detail-info" role="tab">Chi tiết</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#more-info" role="tab">Thêm thông tin</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#rating" role="tab"> đánh giá</a>
+            </li>
+
+          </ul><!-- Tab panes -->
+          <div class="tab-content p-4">
+            <div class="tab-pane active" id="detail-info" role="tabpanel">
+              <img src="https://www.thol.com.vn/pub/media/wysiwyg/banner-product/IsoJect-banner.jpg"
+                alt="banner description">
+              <div class="highlight my-3 p-3">
+                <p>Cuộc chiến hương vị giữa các loại whey chưa bao giờ dừng lại. Envogen Nutrition luôn bảo đảm 100%
+                  nguồn protein tinh
+                  khiết có hương vị hoàn hảo, với những công nghệ mới nhất, để làm ra 25gram whey isolate cùng vị ngon
+                  nhưng lượng calor
+                  tối thiểu 110 calories.
+                  Isoject trải qua phương pháp lọc lạnh tiên tiến đến ba lần, đưa ra một thành phần siêu tinh khiết. Quá
+                  trình này đưa ra
+                  một lượng Glycomacropeptide (GMP- là loại peptide có hoạt tính sinh học cao, nhiều lợi ích cho cơ
+                  thể), hàm lượng này
+                  cao hơn so với quá trình lọc bằng phương pháp ion.</p>
+              </div>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam doloribus tempore facere quam quod
+                modi ratione eaque, quidem ipsum pariatur! Inventore harum totam, consequuntur unde molestiae labore
+                quia ad voluptatem?</p>
+              <h1>TSỰ KHÁC BIỆT CỦA ISOJECT, CÔNG NGHỆ IGNITOR ENZYM MỚI NHẤT.</h1>
+              <img src="https://www.thol.com.vn/pub/media/wysiwyg/banner-product/IsoJect-banner.jpg" alt="">
+              <div class="row py-4">
+                <div class="col-5 col-md-3 col-sm-4"><img
+                    src="https://www.thol.com.vn/pub/media/wysiwyg/banner-product/IsoJect-banner.jpg" alt=""></div>
+                <div class="col-7 col-md-9 col-sm-8">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Id
+                  debitis ut sequi hic
+                  aliquid, ,voluptatum itaque e tenetur!,voluptatum itaque e tenetur!</div>
+              </div>
+              <div class="how-to-use py-3">
+                <h3>Huong dan su dung</h3>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur perspiciatis atque ea velit
+                  nulla eveniet sed quasi nostrum quod omnis esse, dolor voluptates dolorum, blanditiis reiciendis
+                  beatae! Modi, dolore aspernatur.</p>
+              </div>
+              <h3>Khuyen nghi</h3>
+              <div class="highlight my-3 p-3">
+                <p>Cuộc chiến hương vị giữa các loại whey chưa bao giờ dừng lại. Envogen Nutrition luôn bảo đảm 100%
+                  nguồn protein tinh
+                  khiết có hương vị hoàn hảo, với những công nghệ mới nhất, để làm ra 25gram whey isolate cùng vị ngon
+                  nhưng lượng calor
+                  tối thiểu 110 calories.
+                  Isoject trải qua phương pháp lọc lạnh tiên tiến đến ba lần, đưa ra một thành phần siêu tinh khiết. Quá
+                  trình này đưa ra
+                  một lượng Glycomacropeptide (GMP- là loại peptide có hoạt tính sinh học cao, nhiều lợi ích cho cơ
+                  thể), hàm lượng này
+                  cao hơn so với quá trình lọc bằng phương pháp ion.</p>
+              </div>
+            </div>
+            <div class="tab-pane" id="more-info" role="tabpanel">
+              <div class="row">
+                <div class="col-6 col-md-4">
+                  <p>Gia</p>
+                  <p>Ma vach</p>
+                  <p>Mau sac</p>
+                  <p>Nha san xuat</p>
+                  <p>Xuast xu</p>
+                </div>
+                <div class="col-6 col-md-8">
+                  <p>20.000.000</p>
+                  <p>ISOJECT</p>
+                  <p>Xanh da troi</p>
+                  <p>NTT</p>
+                  <p>Nhat Ban</p>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="tab-pane py-4" id="rating" role="tabpanel">
+              <form method="POST" action="{% url 'cart:review' %}">
+                {% csrf_token %}
+                <input type='hidden' value='{{object.id}}' name='product'>
+                <div class="row">
+                  <div class="col">
+                    <label>Full name:</label>
+                    <input required name="full_name" type="text" class="form-control" placeholder="name">
+                  </div>
+                </div>
+                <div class="row pt-4">
+                  <div class="col">
+                    <label>Subject :</label>
+                    <input required name="subject" type="text" class="form-control" placeholder="subject">
+                  </div>
+                </div>
+                <div class="row pt-4">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">Content</label>
+                      <textarea required name="content" class="form-control" id="exampleFormControlTextarea1"
+                        rows="3"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="rating py-2">
+                  <input type="radio" name="rating" value="1" id="1" required>
+                  <label for="1" data-toggle="tooltip" data-placement="top" title="Rất tốt">☆</label>
+                  <input required type="radio" name="rating" value="2" id="2">
+                  <label data-toggle="tooltip" data-placement="top" title="Tốt" for="2">☆</label>
+                  <input required type="radio" name="rating" value="3" id="3">
+                  <label data-toggle="tooltip" data-placement="top" title="Bình thường" for="3">☆</label>
+                  <input required type="radio" name="rating" value="4" id="4">
+                  <label data-toggle="tooltip" data-placement="top" title="Tệ" for="4">☆</label>
+                  <input required type="radio" name="rating" value="5" id="5">
+                  <label data-toggle="tooltip" data-placement="top" title="Rất tệ" for="5">☆</label>
+                </div>
+                <button type="submit" value="submit" class="btn btn-dark">Gui danh gia</button>
+              </form>
+              {% comment %} {% for review in reviews %}
+              <p>Full Name: {{review.full_name}}</p>
+              <p>Subject: {{review.subject}}</p>
+              <p>Content: {{review.content}}</p>
+              <p>Rating: {{review.rating}}</p>
+              {% empty %}
+              <p>There is no review yet</p>
+              {% endfor %} {% endcomment %}
+
+              <!-- comment  -->
+              <div class="card card-comment">
+                {% for review in reviews %}
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-lg-2 col-3 col-sm-3">
+                      <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid" />
+                      <p class="text-secondary text-center">15 Minutes</p>
+                    </div>
+                    <div class="col-lg-10 col-9 col-sm-9">
+                      <p>
+                        <a class="float-left name-comment" href=""><strong>{{review.full_name}}</strong></a>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        {% comment %}
+                        <!-- {% ifequal review.rating 1 %}
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+
+                        {% elseifequal  review.rating 2 %}
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+
+                        {% elseifequal  review.rating 3 %}
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+
+                        {% elseifequal  review.rating 4 %}
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+
+                        {% else %}
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-danger fa fa-star"></i></span>
+
+                        {% endifequal %} --> {% endcomment %}
+
+
+
+                      </p>
+                      <div class="clearfix"></div>
+                      <span>{{review.subject}}</span>
+                      <p class="content-comment">{{review.content}}</p>
+                      <p>
+                      <div class="text-like">
+                        <i class="fas fa-ellipsis-h ml-3" id="drop-in-comment" data-toggle="dropdown"
+                          aria-haspopup="true" aria-expanded="false"></i>
+                        <div class="dropdown-menu" aria-labelledby="drop-in-comment">
+                          <a class="dropdown-item" href="#"></i>Delete</a>
+                          <a class="dropdown-item" href="#">Something else </a>
+                        </div>
+                        <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+                          aria-controls="collapseExample">
+                          Reply
+                        </a>
+                      </div>
+                    </div>
+                    <div class="card card-inner collapse collapse-reply" id="collapseExample">
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-lg-2 col-3 col-sm-3 ">
+                            <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid" />
+                          </div>
+                          <div class="col-lg-10 col-9 col-sm-9">
+                            <div class="mt-5">
+                              <textarea name="reply" id="" cols="30" rows="3" placeholder="Type something"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-success">Send</button>
+                            <button type="button" class="btn btn-danger mr-2" data-toggle="collapse"
+                              href="#collapseExample" role="button" aria-expanded="false">Cancel</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% for reply in review.replies.all %}
+                  <div class="card card-inner ml-4">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-lg-2 col-3 col-sm-3">
+                          <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid" />
+                          <p class="text-secondary text-center">11 Minutes</p>
+                        </div>
+                        <div class="col-lg-10 col-9 col-sm-9">
+                          <div><a class="name-comment" href=""><strong>{{reply.full_name}}</strong></a></div>
+
+                          <span>tieu de duoc reply</span>
+                          <p class="content-comment">{{reply.content}}</p>
+                          <p>
+                          <div class="text-like">
+                            <i class="fas fa-ellipsis-h ml-3" d="drop-in-comment" data-toggle="dropdown"
+                              aria-haspopup="true" aria-expanded="false"></i>
+                            <div class="dropdown-menu" aria-labelledby="drop-in-comment">
+                              <a class="dropdown-item" href="#"></i>Delete</a>
+                              <a class="dropdown-item" href="#">Something else </a>
+
+                              <!-- display repl comment -->
+                              <!-- <div class="card card-inner ml-4 ">
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-lg-2 col-3 col-sm-3 ">
+                            <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid" />
+                            <p class="text-secondary text-center">11 Minutes</p>
+                          </div>
+                          <div class="col-lg-10 col-9 col-sm-9">
+                            <div><a class="name-comment" href=""><strong>Minh Thien</strong></a></div>
+
+                            <span>tieu de duoc reply</span>
+                            <p class="content-comment">Lorem Ipsum is simply dummy text of the pr make but also the leap
+                              into
+                              electronic typesetting,
+                              remaining
+                              essentially unchanged.
+                              versions of Lorem Ipsum.</p>
+                            <p>
+                            <div class="text-like">
+                              <i class="fas fa-ellipsis-h ml-3" d="drop-in-comment" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"></i>
+                              <div class="dropdown-menu" aria-labelledby="drop-in-comment">
+                                <a class="dropdown-item" href="#"></i>Delete</a>
+                                <a class="dropdown-item" href="#">Something else </a>
+                              </div>
+                              <a href=""> Reply</a>
+                            </div>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div> -->
+                            </div>
+                            {% endfor %}
+                          </div>
+                          {% for review in reviews %}
+                        </div>
+                      </div>{% endfor %}
+                    </div>
+                  </div>
+                </div>
+                <!-- <p>Full Name: {{review.full_name}}</p>
+                <p>Subject: {{review.subject}}</p>
+                <p>Content: {{review.content}}</p>
+                <p>Rating: {{review.rating}}</p> -->
+                {% empty %}
+                <p>There is no review yet</p>
+                {% endfor %}
+
+              </div>
+            </div>
+            <h1>San pham tuong tu</h1>
+            <p>{{ object.full_description|safe }}</p>
+            <hr />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+
+<!-- Initialize Swiper -->
+<script>
+  var galleryThumbs = new Swiper('.gallery-thumbs', {
+    spaceBetween: 10,
+    slidesPerView: 3,
+    loop: true,
+    freeMode: true,
+    loopedSlides: 5, //looped slides should be the same
+    watchSlidesVisibility: true,
+    watchSlidesProgress: true,
+    grabCursor: true,
+  });
+  var galleryTop = new Swiper('.gallery-top', {
+    grabCursor: true,
+    loop: true,
+    loopedSlides: 5, //looped slides should be the same
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    thumbs: {
+      swiper: galleryThumbs,
+    },
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    $(document).click(function (event) {
+      var click = $(event.target);
+      var _open = $(".navbar-collapse").hasClass("show");
+      if (_open === true && !click.hasClass("navbar-toggler")) {
+        $(".navbar-toggler").click();
+      }
+    });
+  });
+</script>
+{% endblock extra_scripts %}

@@ -1,0 +1,134 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>{% block head_title %}{% endblock %}</title>
+  {% block extra_head %} {% endblock %}
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css?{% now "U" %}" />
+
+  <link rel="stylesheet" href="/static/css/nav-bar.css?{% now "U" %}" />
+  <link rel="stylesheet" href="/static/js/mainjs.js?now " U" %}" />
+
+  <link rel="stylesheet" href="/static/css/thanh.css?{% now "U" %}" />
+
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.x.x/css/swiper.min.css"> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.x.x/js/swiper.min.js"></script> -->
+
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+  <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <style type="text/css">
+    html,
+    body,
+    header,
+    .carousel {
+      height: 60vh;
+    }
+
+
+    /* @media (max-width: 740px) {
+
+        >>>>>>>Stashed changes html,
+        body,
+        header,
+        .carousel {
+          height: 100vh;
+        }
+      } */
+
+    @media (min-width: 800px) and (max-width: 850px) {
+
+      html,
+      body,
+      header,
+      .carousel {
+        height: 100vh;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %} {% endif %}
+  </div>
+  {% load widget_tweaks %}
+  <main>
+    <div class="login-background">
+      <section class="login-page">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-md-7 register-responsive text-center">
+              <h2 class="mb-4">Create Account</h2>
+              <form action="{% url 'register' %}" method="POST">
+                {% csrf_token %} {% for field in form %}
+                <div class="form-group">
+                  {{ field.errors }}
+                  <div class="label-inline">
+                    <label for="" class="">{{ field.label_tag }}</label>
+                    {{ field |add_class:'form-control input-login' }}
+                  </div>
+                  {% if field.help_text %}
+                  <p class="help">{{ field.help_text|safe }}</p>
+                  {% endif %}
+                </div>
+                {% endfor %}
+
+                <!-- <input type="submit" value="Login" class="btn btn-default" /> -->
+                <div class="login-welcome py-4">
+                  <button class="btn btn-primary mb-3">Create</button>
+                  <div class="none-mobile-login" style="display: none">
+                    <span>You haved account?</span>
+                    <a href="{% url 'login' %}"> Login</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-12 col-md-5 text-center p-4">
+              <h5>Organic logo</h5>
+              <div class="login-welcome">
+                <h2>Hello, Friend </h2>
+                <p>You haved account !</p>
+                <a href="{% url 'login' %}"><button class="btn btn-outline-success text-light">SIGN IN</button> </a>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="login-back">
+          <a href="{% url 'home' %}"><i class="fas fa-arrow-left"></i> Back home</a></div>
+      </section>
+    </div>
+  </main>
+  <script src="https://kit.fontawesome.com/bff3b0c353.js" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>

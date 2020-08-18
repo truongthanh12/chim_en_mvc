@@ -1,0 +1,548 @@
+:root {
+  --primary-color: #4caf50;
+  --dark-primary-color: #4c924e;
+
+  --text-primary-color: black;
+  --background-color: white;
+}
+
+.bold-text {
+  font-weight: 500;
+}
+
+.navbar-white {
+  background-color: var(--background-color) !important;
+  /* background-color: #aaaaaa !important; */
+  color: var(--custom-color);
+  display: flex;
+  align-items: center;
+  height: 80px;
+  transition: height 0.3s, opacity 0.3s linear;
+}
+.navbar-white .col-6 .row i {
+  font-size: 19px;
+}
+.navbar-white a {
+  color: var(--text-primary-color);
+}
+
+.navbar-white a:hover {
+  color: var(--primary-color);
+}
+
+.nav-item a.active {
+  color: var(--primary-color);
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  background-color: green;
+  opacity: 1;
+  visibility: hidden;
+  position: absolute;
+  background-color: var(--background-color);
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1111;
+  transition: visibility 0.3s, opacity 0.5s linear;
+}
+.dropdown-content.right {
+  right: 0;
+}
+.fa-gratipay,
+.fa-shopping-basket {
+  color: #333;
+  padding-top: 8px;
+}
+.fa-gratipay:hover,
+.fa-shopping-basket:hover {
+  color: #5fbd74;
+}
+@media (max-width: 767px) {
+  .fa-gratipay,
+  .fa-shopping-basket {
+    padding-top: unset;
+  }
+}
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black !important;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  transition: padding-left 0.3s linear;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  /* background-color: var(--background-color); */
+  background-color: #eee;
+  color: #5fbd74 !important;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+}
+
+.search-input {
+  width: 150px;
+  border-radius: 10px;
+  padding: 5px;
+  transition: width 0.2s linear;
+  border: 1px solid #ddd;
+  background-color: whitesmoke;
+}
+
+.search-input:focus {
+  width: 200px;
+  outline: none;
+}
+.fa-heart-o {
+  padding: unset !important;
+  margin: unset !important;
+}
+.has-badge {
+  padding: unset !important;
+  margin: unset !important;
+}
+.fa-stack[data-count]:after {
+  position: absolute;
+  right: 0%;
+  content: attr(data-count);
+  font-size: 50%;
+  padding: 0.6em;
+  border-radius: 999px;
+  line-height: 0.75em;
+  color: white;
+  background: rgba(255, 0, 0, 0.85);
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Page content */
+.content {
+  padding: 16px;
+}
+#img-nav {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  opacity: 0.95;
+  z-index: 1500;
+  background-color: #d4cfcf !important;
+}
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + .content {
+  padding-top: 610px;
+}
+
+.navbar-white ul li {
+  display: inline-block;
+}
+
+/* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 11111; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: rgb(31, 36, 31); /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 16px 0px 16px 0px;
+  text-decoration: none;
+  font-size: 20px;
+  color: rgb(95, 189, 116);
+  display: block;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #eee;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left 0.5s;
+  padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
+}
+
+.ct-primary-color {
+  color: var(--primary-color);
+}
+
+.ct-tab {
+  color: var(--primary-color);
+  transition: border-left 0.2s ease-in;
+}
+
+.ct-tab:hover {
+  color: var(--dark-primary-color);
+}
+
+.ct-tab.active {
+  border-left: 5px solid var(--primary-color);
+}
+
+.ct-primary-color.box-active {
+  border-left: 5px solid var(--primary-color);
+}
+
+.ct-breadcrumb {
+  background-color: whitesmoke;
+}
+
+.ct-breadcrumb .breadcrumb-item {
+  color: black;
+}
+
+.ct-breadcrumb .breadcrumb-item a {
+  color: var(--primary-color);
+}
+
+.ct-product-card {
+  margin-bottom: 8px;
+}
+
+.ct-product-card .block-4-image {
+  height: 150px;
+  border: 2px solid #ddd;
+  transition: border-color 0.2s linear;
+  overflow: hidden;
+}
+
+.ct-product-card .block-4-image img {
+  height: 150px;
+  transition: transform 0.2s linear;
+}
+
+.ct-product-card .block-4-image .ct-container {
+  position: relative;
+  font-family: Arial;
+}
+
+.ct-product-card .block-4-image .sale-block {
+  border-radius: 50%;
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  background-color: rgb(228, 134, 72);
+  color: white;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+}
+
+.ct-product-card:hover .block-4-image {
+  border-color: var(--primary-color);
+}
+
+.ct-product-card:hover .block-4-image img {
+  transform: scale(1.25);
+}
+
+.ct-product-card:hover .block-4-action {
+  background-color: var(--primary-color);
+}
+
+.ct-product-card:hover .block-4-action .ct-container {
+  visibility: visible;
+  opacity: 1;
+}
+
+.ct-product-card a {
+  color: black;
+}
+
+.ct-product-card .block-4-text {
+  text-align: center;
+}
+
+.ct-product-card .block-4-action {
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.3s linear;
+}
+
+.ct-product-card .block-4-action .ct-container {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.3s linear, opacity 0.3s linear;
+}
+
+.ct-product-card .block-4-action .ct-container a {
+  display: inline;
+}
+
+.ct-product-card .block-4-action .ct-container i {
+  font-size: 1.25em;
+  color: white;
+}
+
+.ct-divider {
+  border-top: 1px solid var(--primary-color);
+  width: 100%;
+}
+
+.img-magnifier-container {
+  position: relative;
+}
+
+.img-magnifier-glass {
+  position: absolute;
+  border: 3px solid #000;
+  border-radius: 50%;
+  cursor: none;
+  /*Set the size of the magnifier glass:*/
+  width: 100px;
+  height: 100px;
+}
+
+.ct-table-content td,
+.ct-table-content th {
+  line-height: 64px;
+}
+/* search */
+/* search form */
+#custom-search-form {
+  margin: 0;
+  margin-top: 5px;
+  padding: 0;
+}
+
+#custom-search-form .search-query {
+  padding-right: 3px;
+  padding-right: 4px \9;
+  padding-left: 3px;
+  padding-left: 4px \9;
+  margin-bottom: 0;
+  margin-top: 0px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.09);
+  cursor: text;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  padding: 0px 1.55em;
+  height: 2.507em;
+  font-size: 0.77em;
+  outline: none;
+  color: #333;
+}
+.search-query:focus + button {
+  z-index: 3;
+}
+/* list-vagetables */
+.search-sec form {
+  padding: 1rem;
+  background-color: white;
+  position: relative;
+  z-index: 100;
+  top: -5.5rem;
+  box-shadow: 1px 1px 2px 1px #aaaaaa;
+  border: none;
+  width: 100%;
+  border-radius: 6px;
+}
+
+#custom-search-form button {
+  border: 0;
+  background: none;
+  padding: 4px 5px;
+  margin-top: 2px;
+  position: relative;
+  left: -37px;
+  outline: none !important;
+  color: rgb(138, 138, 138);
+  border-radius: 3px;
+}
+#custom-search-form button i:hover {
+  color: #333;
+  transition: 0.3s;
+}
+.top-nav .dropdown:hover > .dropdown-menu {
+  display: block;
+  background-color: #999999 !important;
+}
+.top-nav .dropdown-menu a {
+  color: #fff !important;
+}
+.top-nav .dropdown-menu a:hover {
+  background-color: unset !important;
+  color: #eee !important;
+  opacity: 0.8;
+}
+
+.top-nav .dropdown-menu {
+  background-color: #999999 !important;
+}
+.top-nav .dropdown > .dropdown-toggle:active {
+  /*Without this, clicking will make it sticky*/
+  pointer-events: none;
+}
+.top-nav .dropdown > button {
+  background-color: unset !important;
+  border: unset !important;
+  color: #999999;
+  font-size: 15px;
+}
+.top-nav .header-left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.top-nav .header-right {
+  font-size: 15px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.top-nav .header-right .login {
+  border-right: 1px solid #999999;
+  padding-right: 10px;
+}
+.top-nav .header-right .register {
+  border-right: 1px solid #999999;
+  padding: 0 10px 0 10px;
+}
+.top-nav .header-right a {
+  color: #999999;
+}
+.top-nav {
+  font-size: 14px;
+  background-color: #444444;
+  color: #999999;
+}
+.mobile-nav .dropdown img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+.mobile-nav .dropdown {
+  display: flex;
+  justify-content: center;
+}
+.mobile-nav .nav-item {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: unset;
+}
+.dropdown-user {
+  width: 96%;
+  height: 150px;
+
+  border-radius: unset;
+}
+.dropdown-user a {
+  text-align: center;
+}
+.dropdown-user a:hover {
+  color: #333;
+}
+.mobile-nav i {
+  font-size: 20px !important;
+  color: #5e5a54;
+}
+/* payment */
+.steps {
+  margin-top: -41px;
+  display: inline-block;
+  font-size: 16px;
+}
+.step {
+  float: left;
+  background: white;
+  padding: 7px 13px;
+  border-radius: 1px;
+  text-align: center;
+  width: 110px;
+  position: relative;
+}
+.step_line {
+  margin: 0;
+  width: 0;
+  height: 0;
+  border-left: 16px solid #fff;
+  border-top: 16px solid transparent;
+  border-bottom: 16px solid transparent;
+  z-index: 1008;
+  position: absolute;
+  left: 99px;
+  top: 1px;
+}
+.step_line.backline {
+  border-left: 20px solid #f7f7f7;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  z-index: 1006;
+  position: absolute;
+  left: 99px;
+  top: -3px;
+}
+
+.step_complete {
+  background: #5fbd74;
+}
+.step_complete a.check-bc,
+.step_complete a.check-bc:hover,
+.afix-1,
+.afix-1:hover {
+  color: #eee;
+}
+.step_line.step_complete {
+  background: 0;
+  border-left: 16px solid #5fbd74;
+}

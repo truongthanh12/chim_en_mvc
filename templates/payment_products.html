@@ -1,0 +1,65 @@
+{% extends 'base.html' %} {% load widget_tweaks %}{% block content %}
+<section class="products-tab p-4 pt-5">
+  <div class="tab-title mt-5">
+    <div class="text-title-center">
+      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <a class="nav-item active" aria-controls="nav-info" aria-selected="true">
+          <div class="class-flex" id="step1">
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>01. Infomation</p>
+          </div>
+        </a>
+        <div class="bottom-line"></div>
+        <a class="nav-item active" aria-selected="false">
+          <div class="class-flex" id="step2">
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>02. Checkout</p>
+          </div>
+        </a>
+        <div class="bottom-line"></div>
+        <a class="nav-item" aria-selected="false">
+          <div class="class-flex" id="step3">
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>03. confirm</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container payment-check mb-3">
+  <div id="pay" class="step-to-payment">
+    <div class="tab-step p-4">
+      <h5>Check to order</h5>
+      <div class="row py-4">
+        <div class="col-12 col-lg-6 col-sm-6 info-left">
+          <p><strong> Full Name:&nbsp; &nbsp;</strong> {{user_info.full_name}} </p>
+          <p><strong> Phone: &nbsp;&nbsp;</strong> {{user_info.mobile}}</p>
+          <p><strong> Email:&nbsp;&nbsp; </strong>{{user_info.email}}</p>
+          <p><strong> Address:&nbsp;&nbsp; </strong>{{address}}</p>
+        </div>
+        <div class="col-12 col-lg-6 col-sm-6">
+          <p><strong> Tiền hàng :&nbsp;&nbsp;</strong> {{object.get_total_price}} vnđ</p>
+          <p><strong> Ship:&nbsp;&nbsp;</strong> {{user_info.ship}} vnđ</p>
+          <p><strong> Tổng :&nbsp;&nbsp;</strong> {{user_info.totalprice}} vnđ</p>
+          <form action="{% url 'cart:payment_process' %}" method="POST">
+            {% csrf_token %}
+            <strong> Ghi chú giao hàng :&nbsp;&nbsp;</strong>
+            <textarea row="3" name="note" class="form-control"></textarea>
+            <div class="button-pay">
+              <button class="btn btn-success mt-3 text-center" id="step2_next" type="submit" style="width:30%">
+                ORDER</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="back-shop my-2 justify-content-center">
+        <a id="step2_prev" href="{% url 'cart:payment_information' %}"><i class="fas fa-arrow-left"></i> Back</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content%}

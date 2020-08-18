@@ -1,0 +1,319 @@
+<div class="top-nav d-none d-md-block">
+  <div class="container p-2">
+    <div class="row justify-content-between">
+      <div class="col-md-6 header-left">
+        <span>
+          Work time: Monday - Friday: 08AM-06PM
+        </span>
+      </div>
+      <div class="col-md-6 header-right">
+        {% if request.user.is_authenticated %}
+        <div class="dropdown">
+          <a class="bold-text" href="{% url 'profile'%}">
+            <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid" id="img-nav" />
+            <span class="dropdown-toggle"> {{request.user.username}}</span></a>
+          <div class="dropdown-content right">
+            <a href="{% url 'profile'%}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+          </div>
+        </div>
+        {% else %}
+        <div class="login">
+          <a href="{% url 'login' %}"><i class="fa fa-user-lock"></i>
+            Login
+          </a></div>
+        <div class="register">
+          <a href="{% url 'register' %}"><i class="fa fa-user-o "></i>
+            Register
+          </a>
+        </div>
+
+        {% endif %}
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle language" type="button" id="dropdownMenuButton"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Languages
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">VietNamese</a>
+            <a class="dropdown-item" href="#">English</a>
+            <a class="dropdown-item" href="#">Chines</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<form action="{% url 'cart:product-list' %}" class="collapse navbar-collapse wow tada" id="collapseSearch">
+  <div class="container">
+    {% if limit is not None %}
+    <input type="hidden" name="limit" value="{{limit}}">
+    {% endif %}
+    <input type="text" class="search-query" placeholder="Tim kiem" value="{{search}}" name="search"></div>
+</form>
+
+<nav id="navbar" class="navbar-white pl-3 pr-3">
+  <!-- desktop -->
+  <div class="container d-none d-md-block">
+    <div class="row justify-content-around">
+      <!-- Left-side -->
+      <div class="col-8 col-lg-8 nav-text">
+        <a class="navbar-brand" href="{% url 'home' %}">Organic</a>
+        <!-- <div class="dropdown"> -->
+
+        <a class="nav-link bold-text active d-inline" href="{% url 'home' %}">Home <span
+            class="sr-only">(current)</span></a>
+        <a class="nav-link bold-text d-inline" href="{% url 'about' %}">About</a>
+        <a class="nav-link bold-text d-inline" href="{% url 'contact' %}">Contact</a>
+        <div class="nav-link bold-text d-inline dropdown-product-desk" id="navbarDropdown">
+          <a class=" dropdown-toggle " href="{% url 'cart:product-list' %}">Product</a>
+          <!-- dropdown  -->
+          <div class="dropdown-menu w-100 dropdown-category p-3 wow fadeInLeft" data-wow-duration=".2s"
+            aria-labelledby="navbarDropdown">
+            <div class="row">
+              <div class="col-3">
+                <p class="dropdown-item">Category 1</p>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+              </div>
+              <div class="col-3">
+                <p class="dropdown-item">Category 2</p>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+              </div>
+              <div class="col-3">
+                <p class="dropdown-item">Category 3</p>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+              </div>
+              <div class="col-3">
+                <p class="dropdown-item">Category 4</p>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+                <a class="dropdown-item" href="#">Category 1</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right side -->
+      <div class="col-4 col-lg-4 right-nav">
+        <i class="fas fa-search-plus search-collapse pr-3" data-toggle="collapse" data-target="#collapseSearch"
+          aria-expanded="false" aria-controls="collapseSearch"></i>
+        <form id="custom-search-form" class="form-search form-horizontal" action="{% url 'cart:product-list' %}">
+          <div class=" input-append span12">
+            {% if limit is not None %}
+            <input type="hidden" name="limit" value="{{limit}}">
+            {% endif %}
+            <input type="text" class="search-query" placeholder="Tim kiem" value="{{search}}" name="search">
+            <button type="submit" class="btn"><i class="fas fa-search-plus"></i></button>
+        </form>
+        {% if request.user.is_authenticated %}
+        {% if request.session.products_in_favorite %}
+        <a class="fa-stack has-badge" id="icon-badge" data-toggle="tooltip" data-placement="top" title="Wishlist"
+          href="{% url 'favorites' %}" data-count="{{ request.session.products_in_favorite }}">
+          <i class="fab fa-gratipay " href="{% url 'favorites' %}"></i></a>
+        {% else %}
+        <a class="fa-stack has-badge " id="icon-badge" data-toggle="tooltip" data-placement="top" title="Wishlist"
+          href="{% url 'favorites' %}">
+          <i class="fab fa-gratipay pt-1" href="{% url 'favorites' %}"></i></a>
+        {% endif %}
+        {% else %}
+        <a href="{% url 'favorites' %}" class=" fa-stack has-badge" id="icon-badge" data-toggle="tooltip"
+          data-placement="top" title="Login required"><i class="fab fa-gratipay pt-1 icon-badge"></i></a>
+        {% endif %}
+
+        <div class="dropdown">
+          {% if request.session.products_in_cart %}
+          <a class="fa-stack has-badge" data-toggle="tooltip" data-placement="top" title="Badge" id="icon-badge"
+            data-count="{{ request.session.products_in_cart }}" href="/cart">
+            <i class="fa fa-shopping-basket pt-1"></i>
+          </a>
+          {% else %}
+          <a class="fa-stack has-badge" href="{% url 'cart:summary' %}" data-toggle="tooltip" data-placement="top"
+            title="Badge" id="icon-badge">
+            <i class=" fa fa-shopping-basket"></i>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <!-- Mobile -->
+  <div class="container d-md-none mobile-nav">
+    <div class="row">
+
+      <div class="col-4">
+        <div id="mySidenav" class="sidenav">
+
+          <div class="page-wrapper">
+            <nav id="sidebar" class="sidebar-wrapper">
+              <div class="sidebar-content">
+                <div class="sidebar-header">
+                  {% if request.user.is_authenticated %}
+                  <div class="user-pic">
+                    <img class="img-responsive img-rounded"
+                      src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+                      alt="User picture">
+                  </div>
+                  {% endif %}
+                  <div class="user-info">
+
+                    <span class="user-name">
+
+                      {% if request.user.is_authenticated %}
+                      <a class="nav-link bold-text" data-toggle="collapse" href="#collapseUser" role="button"
+                        aria-expanded="false" aria-controls="collapseUser"><span>username<i
+                            class="fas fa-chevron-down"></i></span>
+                      </a>
+
+                      <div class="collapse" id="collapseUser">
+                        <a href="{% url 'profile' %}"><i class="fas fa-user-circle"></i>Profile</a>
+                        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                      </div>
+                      {% else %}
+
+                      <div id="collapseUser " class="text-img-mobile">
+                        <a href="{% url 'register' %}"><i class="fas fa-user-circle pr-2"></i> Register</a>
+                        <a href="{% url 'login' %}"><i class="fas fa-sign-out-alt pl-4 pr-2"></i> Login</a>
+                      </div>
+                      {% endif %}
+                    </span>
+
+
+                  </div>
+                </div>
+                <div class="sidebar-menu">
+                  <ul>
+                    <li class="sidebar-menu-product">
+                      <span><i class="fas fa-home"></i><a href="{% url 'home' %}"> Home</a></span>
+
+                    </li>
+                    <li class="sidebar-menu-product">
+                      <span> <i class="fas fa-address-card"></i><a href="{% url 'about' %}"> About</a></span>
+
+                    </li>
+                    <li class="sidebar-menu-product">
+                      <span><i class="fas fa-address-book"></i><a href="{% url 'contact' %}"> Contact</a></span>
+
+                    </li>
+                    <li class="sidebar-menu-product2">
+                      <span><i class="fas fa-list-alt"></i> <a href="{% url 'cart:product-list' %}"> Product</a></span>
+                      <i class="fas fa-chevron-down" data-toggle="collapse" href="#collapseProductMobile" role="button"
+                        aria-expanded="false" aria-controls="collapseProductMobile"></i>
+                      <!-- <span class="badge badge-pill badge-warning">New</span> -->
+                    </li>
+                    <div class="collapse" id="collapseProductMobile">
+                      <a href="#">Action ngkdns;dhl;</a>
+                      <a href="#">Another action</a>
+                      <a href="#">Action</a>
+                      <a href="#">Action</a>
+                    </div>
+                  </ul>
+                </div>
+                <!-- sidebar-menu  -->
+              </div>
+            </nav>
+          </div>
+        </div>
+        <i class="fas fa-sliders-h mt-2" onclick="openNav()"></i>
+      </div>
+
+      <!-- Brand -->
+      <div class="col-4">
+        <div class="row justify-content-center">
+          <div class="nav-brand pt-1">Organic</div>
+        </div>
+      </div>
+
+      <!-- Icon list -->
+      <div class="col-4">
+        <div class="row justify-content-end align-items-center">
+          <i class="fas fa-search-plus search-collapse pr-3" data-toggle="collapse" data-target="#collapseSearch"
+            aria-expanded="false" aria-controls="collapseSearch"></i>
+          {% if request.user.is_authenticated %}
+          {% if request.session.products_in_favorite %}
+          <a class="fa-stack has-badge" href="{% url 'favorites' %}"
+            data-count="{{ request.session.products_in_favorite }}">
+            <i class="fab fa-gratipay " href="{% url 'favorites' %}"></i></a>
+          {% endif %}
+          {% else %}
+          <a class=" fa-stack has-badge" id="icon-badge-unlogin" data-toggle="tooltip" data-placement="top"
+            title="Login required"><i class="fab fa-gratipay  icon-badge"></i></a>
+          {% endif %}
+          {% if request.session.products_in_cart %}
+          <a class="fa-stack has-badge" id="icon-basket" data-count="{{ request.session.products_in_cart }}"
+            href="/cart">
+            <i class="fa fa-shopping-basket"></i>
+          </a>
+          {% else %}
+          <a class="fa-stack has-badge" href="{% url 'cart:summary' %}">
+            <i class="fa fa-shopping-basket"></i>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+{% block extra_scripts %}
+<script>
+  // When the user scrolls the page, execute myFunction
+  window.onscroll = function () {
+    myFunction();
+  };
+
+  // Get the navbar
+  var navbar = document.getElementById("navbar");
+
+  // Get the offset position of the navbar
+  var sticky = navbar.offsetTop;
+
+  // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+  function myFunction() {
+    if (window.pageYOffset >= sticky) {
+      navbar.classList.add("sticky");
+      collapseSearch.classList.add("sticky-search");
+    } else {
+      navbar.classList.remove("sticky");
+      collapseSearch.classList.remove("sticky-search");
+    }
+  }
+
+  // Get the modal
+  var modal = document.getElementById("mySidenav");
+
+  /* Set the width of the side navigation to 250px */
+  function openNav() {
+    modal.style.width = "280px";
+  }
+
+  /* Set the width of the side navigation to 0 */
+  function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+  }
+
+  function handleMousePos(event) {
+    var mouseClickWidth = event.clientX;
+    if (mouseClickWidth >= 250) {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+  }
+
+  document.addEventListener("click", handleMousePos);
+
+</script>
+
+{%endblock extra_scripts %}

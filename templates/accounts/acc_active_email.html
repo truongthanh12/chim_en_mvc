@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate Account</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css?{% now "U" %}" />
+</head>
+<style>
+    a {
+        text-decoration: none;
+        color: rgb(206, 9, 147);
+        font-weight: bold;
+    }
+
+    button {
+        background: rgb(181, 240, 193);
+        border: 0.1px solid rgb(96, 90, 90);
+        padding: 8px 20px;
+    }
+</style>
+
+<body>
+    <h1>Hey !!! Hi, {{ user.username }}</h1>
+
+    <h3>Click confirm to activate your account</h3>
+    <button class="btn btn-outline-success">
+        <a href="http://{{ domain }}/accounts/activate/{{uid}}/{{token}}" class="">
+            Confirm
+        </a>
+    </button>
+</body>
+
+</html>

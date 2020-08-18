@@ -1,0 +1,198 @@
+{% extends 'base.html' %} {% load widget_tweaks %}{% block content %}
+
+
+
+
+<section class="products-tab p-4 pt-5">
+  <div class="tab-title mt-5">
+    <div class="text-title-center">
+      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <a class="nav-item active" aria-controls="nav-info active" aria-selected="true">
+          <div class="class-flex" id="step1">
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>01. Infomation</p>
+          </div>
+        </a>
+        <div class="bottom-line"></div>
+        <a class="nav-item " aria-selected="false">
+          <div class="class-flex" id="step2">
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>02. Checkout </p>
+          </div>
+        </a>
+        <div class="bottom-line"></div>
+        <a class="nav-item" aria-selected="false">
+          <div class="class-flex" id="step3">
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>03. Confirms</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="container">
+  <div class="step-to-payment mb-2">
+    <div class="tab-content tab-step pt-4" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
+
+
+
+        <form method="POST" action="{% url 'cart:payment_information' %}" class="info p-4">
+          <h5 class="py-3"><u>Customer Infomation</u> </h5>
+          {% csrf_token %}
+          <div class="row">
+            <div class="col">
+              <label>Full name: </label>
+              {% if request.user.is_authenticated %}
+              <input required type="text" class="form-control" placeholder="name" name="full_name"
+                value="{{request.user.first_name}} {{request.user.last_name}}">
+              {% elif user_info is not None %}
+              <input required type="text" class="form-control" placeholder="name" name="full_name"
+                value="{{user_info.full_name}}">
+              {% else %}
+              <input required type="text" class="form-control" name="full_name" placeholder="full_name">
+              {% endif %}
+            </div>
+            <div class="col">
+              <label>Phone :</label>
+              {% if request.user.is_authenticated and request.user.mobile is not None %}
+              <input required type="text" class="form-control" placeholder="mobile" name="mobile"
+                value="{{request.user.mobile}}">
+              {% elif user_info is not None %}
+              <input required type="text" class="form-control" placeholder="mobile" name="mobile"
+                value="{{user_info.mobile}}">
+              {% else %}
+              <input required type="text" class="form-control" name="mobile" placeholder="Your mobile">
+              {% endif %}
+            </div>
+          </div>
+          <div class="row pt-4">
+            <div class="col">
+              <label>Email :</label>
+              {% if request.user.is_authenticated %}
+              <input required type="email" class="form-control" placeholder="email" name="email"
+                value="{{request.user.email}}">
+              {% elif user_info is not None %}
+              <input required type="email" class="form-control" placeholder="email" name="email"
+                value="{{user_info.email}}">
+              {% else %}
+              <input required type="email" class="form-control" name="email" placeholder="email">
+              {% endif %}
+            </div>
+          </div>
+          <div class="row pt-4">
+            <div class="col">
+              <label>Address :</label>
+              {% if request.user.is_authenticated %}
+              <input required type="text" class="form-control" placeholder="address" name="address"
+                value="{{request.user.address}}">
+              {% elif user_info is not None %}
+              <input required type="text" class="form-control" placeholder="address" name="address"
+                value="{{user_info.address}}">
+              {% else %}
+              <input required type="text" class="form-control" name="address" placeholder="address">
+              {% endif %}
+
+            </div>
+          </div>
+          <div class="row pt-4">
+            <div class="col">
+              <label>City :</label>
+              <select id="citySel" class="form-control" name="city">
+                <option value="" selected="selected">Select City</option>
+              </select>
+            </div>
+          </div>
+          <div class="row pt-4">
+            <div class="col">
+              <label>District : </label>
+              <select id="district" class="form-control" name="district">
+                <option value="" selected="selected">Please select City first</option>
+              </select>
+            </div>
+          </div>
+          <div class="back-shop py-5">
+            <a href=""><i class="fas fa-arrow-left"></i> Back to shop</a>
+            <button type="submit" value="submit" id="step1_next" class="a-button small text-uppercase nav nav-tabs">NEXT
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content%}
+{% block extra_scripts %}
+
+<script>
+  async function get_city() {
+    var response = await fetch('/api/cities/')
+    var data = await response.json()
+    return data
+  }
+  window.onload = async function () {
+    var citySel = document.getElementById("citySel")
+    district = document.getElementById("district")
+    var stateObject = await get_city()
+
+    let user_city_id = -1;
+    let user_district_id = -1;
+    if ("{{ request.user.is_authenticated }}" && "{{ request.user.city }}") {
+      user_city_id = "{{ request.user.city.id }}"
+    }
+
+    if ("{{ request.user.is_authenticated }}" && "{{ request.user.district }}") {
+      user_district_id = "{{ request.user.district.id }}"
+    }
+
+    for (var i = 0; i < stateObject.length; i++) {
+      console.log("city")
+      console.log(user_city_id, stateObject[i].id)
+      if (user_city_id != stateObject[i].id) {
+        $('#citySel').append(`<option value="${
+          stateObject[i].id
+          }"  > ${
+          stateObject[i].name
+          } </option>`)
+      } else {
+        $('#citySel').append(`<option value="${
+          stateObject[i].id
+          }" selected > ${
+          stateObject[i].name
+          } </option>`)
+      }
+    }
+    citySel.onchange = async function () {
+      district.length = 1; // remove all options bar first
+      if (this.selectedIndex < 1)
+        return;
+      var response = await fetch(`/api/cities/${
+        this.value
+        }`)
+      var city = await response.json()
+      for (var i = 0; i < city.districts.length; i++) {
+        if (user_district_id != city.districts[i].id) {
+          $('#district').append(`<option value="${
+            city.districts[i].id
+            }"  > ${
+            city.districts[i].name
+            } </option>`)
+        } else {
+          $('#district').append(`<option value="${
+            city.districts[i].id
+            }" selected > ${
+            city.districts[i].name
+            } </option>`)
+
+        }
+
+      }
+    }
+    citySel.onchange(); // reset in case page is reloaded
+  }
+</script>
+
+
+{% endblock extra_scripts %}

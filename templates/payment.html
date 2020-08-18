@@ -1,0 +1,345 @@
+{% extends 'base.html' %} {% block content %}
+
+
+<!-- products -->
+<section class="products-tab p-4 pt-5">
+  <div class="tab-payment mt-5">
+    <div class="text-title-center">
+      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <a class="nav-item " id="nav-info-tab" data-toggle="tab" href="#nav-info" role="tab" aria-controls="nav-info"
+          aria-selected="true">
+          <div class="class-flex " id="step1">
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>01. Infomation</p>
+          </div>
+        </a>
+        <a class="nav-item check" id="nav-check-tab" data-toggle="tab" href="#nav-check" role="tab"
+          aria-controls="nav-check" aria-selected="false">
+          <div class="class-flex" id="step2">
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>02. Check Cart</p>
+          </div>
+        </a>
+        <a class="nav-item pay" id="nav-pay-tab" data-toggle="tab" href="#nav-pay" role="tab" aria-controls="nav-pay"
+          aria-selected="false">
+          <div class="class-flex" id='step3'>
+            <button class="btn btn-circle"><i class="fa fa-check"></i></button>
+            <p>03. Pay</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="container">
+  <div class="step-to-payment mb-2">
+    <div id="info" class="w3-container payment">
+      <form class="info p-4">
+        <h2 class="py-3">Customer Infomation</h2>
+        <div class="row">
+          <div class="col">
+            <label>Full name:</label>
+            <input type="text" class="form-control" placeholder="name">
+          </div>
+          <div class="col">
+            <label>Phone :</label>
+            <input type="text" class="form-control" placeholder="phone">
+          </div>
+        </div>
+        <div class="row pt-4">
+          <div class="col">
+            <label>Email :</label>
+            <input type="text" class="form-control" placeholder="email">
+          </div>
+        </div>
+        <div class="row pt-4">
+          <div class="col">
+            <label>Address :</label>
+            <input type="text" class="form-control" placeholder="address">
+          </div>
+        </div>
+        <div class="row pt-4">
+          <div class="col">
+            <label>District :</label>
+            <select class="form-control">
+              <option value="volvo">Volvo</option>
+              <option value="saab">Saab</option>
+            </select>
+          </div>
+          <div class="col">
+            <label>City :</label>
+            <select class="form-control">
+              <option value="volvo">Volvo</option>
+              <option value="saab">Saab</option>
+            </select>
+          </div>
+        </div>
+        <!-- <div class="back-shop py-5">
+          <a><i class="fas fa-arrow-left"></i> Back to shop</a>
+          <button id="step1_next">Next</button>
+        </div> -->
+      </form>
+      <div class="back-shop py-5">
+        <a><i class="fas fa-arrow-left"></i> Back to shop</a>
+        <button id="step1_next">Next</button>
+      </div>
+    </div>
+    <div id="check" class="w3-container payment">
+      <div class="container">
+        <div class="table-responsive text-nowrap py-3">
+          <h2>Your cart</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Image</th>
+                <th scope="col">Item title</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total Item Price</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order_item in object.items.all %}
+              <tr class="ct-table-content">
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><img height="64" src="{{ order_item.product.images.first }}" alt="{{ order_item.product.title }}" />
+                </td>
+                <td>{{ order_item.product.title }}</td>
+                <td>{{ order_item.product.get_price }} vnđ</td>
+                <td>
+                  <a style="color: #aaa;" href="{% url 'cart:descrease-quantity' order_item.id %}"><i
+                      class="fa fa-minus mr-2"></i></a>
+                  {{ order_item.quantity }}
+                  <a style="color: #aaa;" href="{% url 'cart:increase-quantity' order_item.id %}"><i
+                      class="fa fa-plus ml-2"></i></a>
+                </td>
+                <td>
+                  {% if order_item.item.discount_price %} ${{
+                              order_item.get_total_discount_item_price }}
+                  <span class="badge badge-primary">Saving ${{ order_item.get_amount_saved }}</span>
+                  {% else %} {{ order_item.get_total_item_price }} vnđ{% endif %}
+                </td>
+                <td> <a style="color: red;" href="{% url 'cart:remove_from_cart' order_item.id %}">
+                    <i class="fa fa-close "></i>
+                  </a></td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5">Your cart is empty</td>
+              </tr>
+              <tr>
+                <td colspan="5">
+                  <a class="btn btn-primary float-right" href="{% url 'cart:product-list' %}">Continue shopping</a>
+                </td>
+              </tr>
+              {% endfor %} {% if object.coupon %}
+              <tr>
+                <td colspan="4"><b>Coupon</b></td>
+                <td><b>-${{ object.coupon.amount }}</b></td>
+              </tr>
+              {% endif %} {% if object.get_total %}
+              <tr>
+                <td colspan="4"><b>Order Total</b></td>
+                <td><b>${{ object.get_total }}</b></td>
+              </tr>
+              <tr>
+                <td colspan="5">
+                  <a class="btn btn-warning float-right ml-2" href="/checkout/">Proceed to checkout</a>
+                  <a class="btn btn-primary float-right" href="/">Continue shopping</a>
+                </td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+        {% if object.items.count > 0 %}
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row justify-content-end">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-12 text-right border-bottom mb-5">
+                    <h3 class="text-black h4 text-uppercase">Cart Totals: {{object.get_total_price}} vnđ</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="back-shop py-5">
+          <a id="step2_prev"><i class="fas fa-arrow-left"></i> Back</a>
+          <button id="step2_next">Next</button>
+        </div>
+      </div>
+
+      {% endif %}
+    </div>
+    <div id="pay" class="w3-container payment">
+      <div class="pay py-3 text-center">
+        <h2 class="py-4">Check to order</h2>
+        <p>Full Name: </p>
+        <p>Full Name: </p>
+        <p>Full Name: </p>
+        <p>Full Name: </p>
+        <div>
+
+          <button class="btn btn-success mt-3 text-center" style="width:50%">PROCEED TO ORDER</button></div>
+        <div class="back-shop my-2">
+          <a id="step3_prev"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!------------------ product list card --------------->
+<!------------------ product list card --------------->
+{% endblock content %}
+
+{% block extra_scripts %}
+
+<script>
+  // function openCity(cityName) {
+  //   var i;
+  // var x = document.getElementsByClassName("payment");
+  //   for (i = 0; i < x.length; i++) {
+  //     x[i].style.display = "none";
+  //   }
+  //   document.getElementById(cityName).style.display = "block";
+  // }
+
+
+  var step1 = document.getElementById("step1");
+  var step2 = document.getElementById("step2");
+  var step3 = document.getElementById("step3");
+  // var x = document.getElementById("info");
+  //   var x = document.getElementById("check");
+  //   var x = document.getElementById("pay");
+  var x = document.getElementsByClassName("payment");
+  var step1_next = document.getElementById("step1_next");
+  var step2_prev = document.getElementById("step2_prev");
+  var step2_next = document.getElementById("step2_next");
+  var step3_prev = document.getElementById("step3_prev");
+  window.onload = function () {
+    step1.classList.add("active")
+    x[0].style.display = "block";
+    x[1].style.display = "none";
+    x[2].style.display = "none";
+  };
+  step1_next.addEventListener("click", () => {
+    step2.classList.add("active")
+
+    x[0].style.display = "none";
+    x[1].style.display = "block";
+    x[2].style.display = "none";
+  })
+  step2_next.addEventListener("click", () => {
+    step3.classList.add("active")
+    x[0].style.display = "none";
+    x[1].style.display = "none";
+    x[2].style.display = "block";
+  })
+  step2_prev.addEventListener("click", () => {
+    step2.classList.remove("active")
+    x[0].style.display = "block";
+    x[1].style.display = "none";
+    x[2].style.display = "none";
+  })
+  step3_prev.addEventListener("click", () => {
+    step3.classList.remove("active")
+    x[0].style.display = "none";
+    x[1].style.display = "block";
+    x[2].style.display = "none";
+  })
+</script>
+
+<script nonce="">  // Create a Stripe client.
+  var stripe = Stripe('');
+
+  // Create an instance of Elements.
+  var elements = stripe.elements();
+
+  // Custom styling can be passed to options when creating an Element.
+  // (Note that this demo uses a wider set of styles than the guide below.)
+  var style = {
+    base: {
+      color: '#32325d',
+      fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+      fontSmoothing: 'antialiased',
+      fontSize: '16px',
+      '::placeholder': {
+        color: '#aab7c4'
+      }
+    },
+    invalid: {
+      color: '#fa755a',
+      iconColor: '#fa755a'
+    }
+  };
+
+  // Create an instance of the card Element.
+  var card = elements.create('card', { style: style });
+
+  // Add an instance of the card Element into the card-element <div>.
+  card.mount('#card-element');
+
+  // Handle real-time validation errors from the card Element.
+  card.addEventListener('change', function (event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = '';
+    }
+  });
+
+  // Handle form submission.
+  var form = document.getElementById('stripe-form');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    stripe.createToken(card).then(function (result) {
+      if (result.error) {
+        // Inform the user if there was an error.
+        var errorElement = document.getElementById('card-errors');
+        errorElement.textContent = result.error.message;
+      } else {
+        // Send the token to your server.
+        stripeTokenHandler(result.token);
+      }
+    });
+  });
+
+  // Submit the form with the token ID.
+  function stripeTokenHandler(token) {
+    // Insert the token ID into the form so it gets submitted to the server
+    var form = document.getElementById('stripe-form');
+    var hiddenInput = document.createElement('input');
+    hiddenInput.setAttribute('type', 'hidden');
+    hiddenInput.setAttribute('name', 'stripeToken');
+    hiddenInput.setAttribute('value', token.id);
+    form.appendChild(hiddenInput);
+
+    // Submit the form
+    form.submit();
+  }
+
+  var currentCardForm = $('.current-card-form');
+  var newCardForm = $('.new-card-form');
+  var use_default_card = document.querySelector("input[name=use_default_card]");
+  use_default_card.addEventListener('change', function () {
+    if (this.checked) {
+      newCardForm.hide();
+      currentCardForm.show()
+    } else {
+      newCardForm.show();
+      currentCardForm.hide()
+    }
+  })
+
+</script>
+
+{% endblock extra_scripts %}

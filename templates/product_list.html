@@ -1,0 +1,368 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<script>
+  function page_navigation(key, value) {
+    console.log("page_navigation");
+    console.log('cc');
+    _url = window.location.href;
+    console.log(0);
+    split_url = _url.split('?')[1];
+    if (split_url != null) {
+      n = split_url.indexOf(key)
+      if (n === -1) {
+        console.log("Not found");
+        _url = _url + '&' + key + value;
+        window.location.href = _url;
+      }
+      else {
+        console.log(2);
+        i = n;
+        str = '';
+        while (i < split_url.length && split_url.charAt(i) !== '&') {
+          str += split_url.charAt(i);
+          i++;
+        }
+
+        window.location.href = window.location.href.replace(str, key + value);
+      }
+    }
+    else {
+      _url = _url + '?' + key;
+      _url += value;
+      window.location.href = _url;
+    }
+  }
+
+  function navigation_to(url) {
+    window.location.href = url;
+  }
+
+
+</script>
+
+
+
+<div class="bg-light">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb ct-breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Shop</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="site-section">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-12 col-lg-3 mb-5">
+          <div id="menu_area" class="menu-area">
+            <div class="container">
+              <div class="row">
+                <nav class="navbar navbar-light navbar-expand-lg mainmenu">
+                  <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse wow fadeInDown" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                      <li class="py-3 p"><i class="fas fa-heart"></i>DANH MỤC CHÍNH</li>
+                      {% for category in categories %}
+                      <li><a href="/cart/shop?category={{category.title}}">{{category.title}}
+                          ({{category.get_products_number}})</a> </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <div class="img-sidebar py-3">
+            <div class="hover-sidebar column">
+              <div>
+                <figure><img
+                    src="https://www.thol.com.vn/pub/media/catalog/product/cache/small_image/300x300/beff4985b56e3afdbeabfc89641a4582/t/i/titanium-chocolate.jpg"
+                    alt="day"></figure>
+              </div>
+              <div>
+                <figure><img
+                    src="https://www.thol.com.vn/pub/media/catalog/product/cache/small_image/300x300/beff4985b56e3afdbeabfc89641a4582/t/i/titanium-chocolate.jpg"
+                    alt="day"></figure>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-9 col-12">
+          <div class="row my-3">
+            <div class="col-6 col-lg-6 sort-product-list">
+              <span>Sort by quanlity</span>
+              <select id="lblimit" name="lblimit" class="nb_item" onchange="page_navigation('limit=', this.options[this.selectedIndex].value)
+                          ">
+                {% for key, value in limit_choices.items %}
+                {% if key == limit %}
+                <option value="{{key}}" selected>{{value}}</option>
+                {% else %}
+                <option value="{{key}}">{{value}}</option>
+                {% endif %}
+                {% endfor %}
+              </select></div>
+            <div class="col-6 col-lg-6">
+              <div class="sort  sort-product-list">
+                <span>Sort</span>
+                <select class="selectProductSort" id="lbsort"
+                  onchange="page_navigation('sort=', this.options[this.selectedIndex].value)">
+                  <option value="">Mặc định</option>
+                  {% for key, value in sort_choices.items %}
+                  {% if key == limit %}
+                  <option value="{{key}}" selected>{{value}}</option>
+                  {% else %}
+                  <option value="{{key}}">{{value}}</option>
+                  {% endif %}
+                  {% endfor %}
+
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            {% for product in products %}
+            <div class="ct-product-card ct-primary-color col-md-4 col-12 pb-4" data-aos="fade-up">
+              <div class="product-card">
+                <a href="{% url 'cart:product-detail' product.slug %}">
+                  <img src="{{product.images.first}}"></a>
+                {% if product.promotion > 0 %}
+                <div class="sale">
+                  <div class="background-sale">
+                    <p>-{{product.promotion}}%</p>
+                  </div>
+                </div>
+                <div class="out-of-stock">
+                  <div class="background-out">
+                    <p>Out of stock</p>
+                  </div>
+                </div>
+
+                {% endif %}
+
+
+                <div class="product-content">
+                  <a href="{% url 'cart:product-detail' product.slug %}">
+                    <ul class="cart-icon">
+                      <li><a href="{% url 'cart:product-detail' product.slug %} "><i data-toggle="tooltip"
+                            data-placement="bottom" title="Add to cart" class="fa fa-cart-plus"></i></a></li>
+
+                      {% if request.user.is_authenticated%}
+                      {% if product.id in liked %}
+                      <li><a id="{{product.id}}" onclick="tym(this.id)">
+                          <i data-toggle="tooltip" data-placement="bottom" title="Add to wishlist"
+                            class="fa fa-heart"></i></a>
+                      </li>
+                      {%else%}
+                      <li><a id="{{product.id}}" onclick="tym(this.id)"><i data-toggle="tooltip" data-placement="bottom"
+                            title="Add to wishlist" class="fa fa-heart-o"></i></a>
+                      </li>
+                      {% endif %}
+                      {% else %}
+                      <li><a><i data-toggle="tooltip" data-placement="bottom" title=" Login to Add to wishlist"
+                            class="fa fa-heart-o"></i></a>
+                      </li>
+                      {% endif %}
+
+                      <li><a data-toggle="modal" data-target="#product{{product.id}}" href="#"><i data-toggle="tooltip"
+                            data-placement="bottom" title="Quick view" class="fas fa-search"></i></a></li>
+                      <li><a href="#"><i data-toggle="tooltip" data-placement="bottom" title="Compare"
+                            class="fas fa-compress-alt"></i></a>
+                      </li>
+                    </ul>
+                  </a>
+                </div>
+
+              </div>
+              <div class="product-info">
+                <p>{{product.title}}</p>
+                <div>
+                  {% if product.promotion > 0 %}
+                  <span class="price">{{product.price}}</span>
+                  <span class="discounted-price">{{product.get_promotion_price}}</span>
+                  {%else%}
+                  <span class="discounted-price ">{{product.price}}</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            </a>
+            <!------------------ modal quick view --------------->
+            <div class="modal fade bd-view-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+              id="product{{product.id}}" aria-hidden="true">
+              <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="row">
+                    <div class="col-12 col-md-6 col-sm-12">
+                      <div id="view_carousel" class="carousel view-detail slide" data-ride="carousel">
+                        <ol class="carousel-indicators view-indicators">
+                          <li data-target="#view_carousel" data-slide-to="0" class="active"></li>
+                          <li data-target="#view_carousel" data-slide-to="1"></li>
+                          <li data-target="#view_carousel" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner view_carousel">
+                          {% for image in product.images.all %}
+                          <div class="carousel-item active">
+                            <img src="{{image}}" alt="First slide">
+                          </div>
+                          {% endfor %}
+                          <button type="button" class="close1 pr-2 pt-1" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <a class="carousel-control-prev" href="#view_carousel" role="button" data-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#view_carousel" role="button" data-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-sm-12 right-detail-view">
+                      <button type="button" class="close pr-2 pt-1" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <div class="detail-info pt-4 pr-4">
+                        <h3 class="title">{{product.title}}</h3>
+                        <div class="rating">
+                          <div class="stars">
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <i class="far fa-star"></i>
+                            <span class="review-no ml-2">(4 customer reviews)</span>
+                          </div>
+                        </div>
+
+                        <div class="mb-3 mt-3">
+                          <div class="product-info">
+
+                            <div style="text-align: left !important"><span class="price">%15.00</span>
+                              <span class="discounted-price">${{product.price}}</span></div>
+                          </div>
+                        </div>
+                        <dl class="item-property pb-2">
+
+                          <dd>
+                            <p>{{product.description}}</p>
+                          </dd>
+                          <div class="line pb-3"></div>
+
+                        </dl>
+
+                        <div class="input-group mb-2">
+                          <div class="input-group-prepend">
+                            <button class="btn btn-dark btn-sm" id="minus-btn"><i class="fa fa-minus"></i></button>
+                          </div>
+
+                          <input class="text-center" style="height: 30px !important;" type="number" id="qty_input"
+                            value="1" min="1">
+                          <div class="input-group-prepend">
+                            <button class="btn btn-dark btn-sm" id="plus-btn"><i class="fa fa-plus"></i></button>
+                          </div>
+                          <button type="button" class="btn btn-primary  ml-3">Add to cart</button>
+
+                        </div>
+                        <div class="compare">
+                          <i class="far fa-star pr-2"></i><span>Add to Wishlist</span>
+                          <i class="fas fa-compress-alt pr-2"></i><span>Compare</span>
+                        </div>
+                        <div class="line pb-3"></div>
+                        <div class="view-bottom">
+                          <div class="row">
+                            <div class="col-5">
+                              <p>Category</p>
+                              <p>Tag</p>
+                              <p>Share</p>
+                            </div>
+                            <div class="col-7">
+                              <p>{{product.category}}</p>
+                              <p>Bread ,asd</p>
+                              <p>
+                                <a href=""><span class="fa fa-star"></a></span>
+                                <a href=""><span class="fa fa-star"></a></span>
+                                <a href=""><span class="fa fa-star"></span>
+                                  <a href=""><span class="fa fa-star"></a>
+                                  </span></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end modal quick view -->
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="navigation-page">
+      <nav aria-label="...">
+        {% if products.has_other_pages %}
+
+        <ul class="pagination">
+          {% if products.has_previous %}
+          <li class="page-item">
+            <a onclick="page_navigation('page=', {{products.previous_page_number}})" class="page-link">&laquo</a>
+          </li>
+          {% else %}
+          <li class="page-item">
+            <a class="page-link disable">&laquo</a>
+          </li>
+          {% endif %}
+
+          {% for i in products.paginator.page_range %}
+
+          {% if products.number == i %}
+          <li class="page-item active">
+            <a onclick="page_navigation('page=', {{i}})" class="page-link">{{i}}</a>
+          </li>
+          {% else %}
+          <li class="page-item">
+            <a onclick="page_navigation('page=',{{i}})" class="page-link">{{i}}</a>
+          </li>
+          {% endif %}
+          {% endfor %}
+          {% if products.has_next %}
+          <li class="page-item">
+            <a onclick="page_navigation('page=', {{products.next_page_number}})" class="page-link">&raquo</a>
+          </li>
+          {% endif %}
+        </ul>
+        {% endif %}
+
+      </nav>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_scripts %}
+<script>
+  $(document).ready(function () {
+    $(document).click(function (event) {
+      var click = $(event.target);
+      var _open = $(".navbar-collapse").hasClass("show");
+      if (_open === true && !click.hasClass("navbar-toggler")) {
+        $(".navbar-toggler").click();
+      }
+    });
+  });
+</script>
+{% endblock extra_scripts %}
